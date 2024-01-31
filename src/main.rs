@@ -35,15 +35,15 @@ fn convert_input_string(s: &str) -> f64 {
     return f;
 }
 
-fn convert_cel_to_fh(input: f64) -> String {
-    let fh = input * 1.8;
-    let output = fh + 32.00;
-    return output.to_string();
+fn convert_cel_to_fh(mut input: f64) -> String {
+    input = input * 1.8;
+    input = input + 32.00;
+    return input.to_string() + " F ";
 }
 
-fn convert_fh_to_cel(input: f64) -> String {
-    let cel = input - 32.00;
-    let output = cel / 1.8; //This is ugly I should consider making the temp variable mutatable in
-                            //the first place as this requires copying into two locations in memory needlessly
-    return output.to_string();
+fn convert_fh_to_cel(mut input: f64) -> String {
+    input = input - 32.00;
+    input = input / 1.8;
+    //the first place as this requires copying into two locations in memory needlessly
+    return input.to_string() + " C ";
 }
