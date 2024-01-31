@@ -4,7 +4,7 @@ export component TempConvWindow inherits Window {
     in property<string> result: "";
     callback request-increase-value();
     callback request-decrease-value();
-    callback request-convert-temp(string);
+    callback request-convert-temp(string,string);
     
     GridLayout {
         padding: 15px;
@@ -26,7 +26,7 @@ export component TempConvWindow inherits Window {
             }
         Row {
             Text{
-                text: "From";
+                text: "Unit";
                 horizontal-alignment: center;
                 }
             }
@@ -34,24 +34,10 @@ export component TempConvWindow inherits Window {
             unitin :=  ComboBox {
                 width: self.preferred-width;
                 height: self.preferred-height;
-                model: ["C", "F", "K"];
+                model: ["C", "F"];
                 current-value: "C";
                 }
 
-            }
-        Row {
-            Text {
-                text: "To";
-                horizontal-alignment: center;
-                }
-            }
-        Row {
-            unitout :=  ComboBox {
-                width: self.preferred-width;
-                height: self.preferred-height;
-                model: ["C", "F", "K"];
-                current-value: "F";
-                }
             }
         Row {
             Text {
@@ -62,7 +48,7 @@ export component TempConvWindow inherits Window {
             Button {
                 text: "Convert";
                 clicked => {
-                    root.request-convert-temp(temp-input.text);
+                    root.request-convert-temp(temp-input.text,unitin.current-value);
                 }
                 }
             }

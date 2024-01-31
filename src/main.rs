@@ -15,13 +15,15 @@ fn main() -> Result<(), slint::PlatformError> {
 
     ui.on_request_convert_temp({
         let ui_handle = ui.as_weak();
-        move |string| {
+        move |input_string, unit| {
             let ui = ui_handle.unwrap();
-            let s = string.trim();
-            let inputtemp = convert_input_string(&s);
-            let output = convert_cel_to_fh(&inputtemp);
-            let result = output.to_string();
-            ui.set_result(result.into());
+            let s = input_string.trim();
+            let temp: f64 = convert_input_string(s);
+            if unit == "C" {
+                ui.set_result(convert_cel_to_fh(temp).into());
+            } else {
+                ui.set_result(convert_fh_to_cel(temp).into());
+            }
         }
     });
 
@@ -33,8 +35,15 @@ fn convert_input_string(s: &str) -> f64 {
     return f;
 }
 
-fn convert_cel_to_fh(input: &f64) -> f64 {
+fn convert_cel_to_fh(input: f64) -> String {
     let fh = input * 1.8;
     let output = fh + 32.00;
-    return output;
+    return output.to_string();
+}
+
+fn convert_fh_to_cel(input: f64) -> String {
+    let cel = input - 32.00;
+    let output = cel / 1.8; //This is ugly I should consider making the temp variable mutatable in
+                            //the first place as this requires copying into two locations in memory needlessly
+    return output.to_string();
 }
