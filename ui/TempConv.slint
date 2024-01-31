@@ -1,0 +1,73 @@
+import { Button, VerticalBox, LineEdit, ComboBox } from "std-widgets.slint";
+
+export component TempConvWindow inherits Window {
+    in property<string> result: "";
+    callback request-increase-value();
+    callback request-decrease-value();
+    callback request-convert-temp(string);
+    
+    GridLayout {
+        padding: 15px;
+        spacing: 10px;
+        Row {
+          temp-text :=  Text {
+                text: "Enter Temperature";
+                horizontal-alignment: center;
+                }
+            }
+        Row {
+          temp-input :=  LineEdit {
+                font-size: 16px;
+                width: unitin.preferred-width;
+                height: 35px;
+                placeholder-text: "input here";
+                horizontal-alignment: center;
+                }
+            }
+        Row {
+            Text{
+                text: "From";
+                horizontal-alignment: center;
+                }
+            }
+        Row {
+            unitin :=  ComboBox {
+                width: self.preferred-width;
+                height: self.preferred-height;
+                model: ["C", "F", "K"];
+                current-value: "C";
+                }
+
+            }
+        Row {
+            Text {
+                text: "To";
+                horizontal-alignment: center;
+                }
+            }
+        Row {
+            unitout :=  ComboBox {
+                width: self.preferred-width;
+                height: self.preferred-height;
+                model: ["C", "F", "K"];
+                current-value: "F";
+                }
+            }
+        Row {
+            Text {
+                text: root.result;
+                }
+            }
+        Row {
+            Button {
+                text: "Convert";
+                clicked => {
+                    root.request-convert-temp(temp-input.text);
+                }
+                }
+            }
+        }
+        
+
+
+}
