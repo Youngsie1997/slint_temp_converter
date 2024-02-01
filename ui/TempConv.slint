@@ -2,7 +2,8 @@ import { Button, VerticalBox, LineEdit, ComboBox, StandardButton } from "std-wid
 
 export component TempConvWindow inherits Window {
     in property<string> result: "";
-    in-out property<string> error-text-value: "Error\nPlease enter a valid number";
+    in-out property<string> error-type-string: "Error";
+    in-out property<string> error-text-value: "";
     callback request-increase-value();
     callback request-decrease-value();
     callback request-convert-temp(string);
@@ -15,30 +16,57 @@ export component TempConvWindow inherits Window {
     
 
     error-popup := PopupWindow {
-        x: 40px;
-        y: 100px;
-        width: parent.width;
-
+        width: 500px;
+        close-on-click: false;
 
         Rectangle {
             background: root.background;
-            border-color: error-popup-text.color;
-            border-width: 1px;
+            border-color: grey;
+            border-width: 3px;
+            GridLayout {
+                spacing: 5px;
+                padding: 5px;
+                Row {
+                    Rectangle {
+                        padding: 0px;
+                        height: 45px;
+                        background: lightgrey;
+                        border-width: 3px;
+                        border-color: black;
+                        
+                    Text {
+                        text: root.error-type-string;
+                        font-size: 22px;
+                        width: 480px;
+                        color: black;
+                        horizontal-alignment: center;
+                        }
+                    }
+                    }
+                Row {
+                   error-text-output := Text  {
+                        text: root.error-text-value;
+                        color: red;
+                        font-size: 16px;
+                        horizontal-alignment: center;
+                        width: 480px;
+                        }
+                    }
+                Row {
+
+                    }
+                Row {
+                StandardButton {
+                    colspan: 1;
+                    kind: ok;
+                    clicked => {
+                            error-popup.close()
+                            }
+                    }
+                    }
             }
+        }
 
-
-        error-popup-layout := Dialog {
-            height:100%; width: 100%;
-
-
-            error-popup-text := Text {
-                text: root.error-text-value;
-                wrap: word-wrap;
-                color: red;
-                horizontal-alignment: center;
-                }
-            StandardButton {kind: ok;}
-            }
         }
 
 
