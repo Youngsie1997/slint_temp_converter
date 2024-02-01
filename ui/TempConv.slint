@@ -1,11 +1,47 @@
-import { Button, VerticalBox, LineEdit, ComboBox } from "std-widgets.slint";
+import { Button, VerticalBox, LineEdit, ComboBox, StandardButton } from "std-widgets.slint";
 
 export component TempConvWindow inherits Window {
     in property<string> result: "";
+    in-out property<string> error-text-value: "Error\nPlease enter a valid number";
     callback request-increase-value();
     callback request-decrease-value();
     callback request-convert-temp(string);
+    callback show-error_popup;
+    callback error-closed();
+
+    show-error_popup => {
+        error-popup.show();
+        }
     
+
+    error-popup := PopupWindow {
+        x: 40px;
+        y: 100px;
+        width: parent.width;
+
+
+        Rectangle {
+            background: root.background;
+            border-color: error-popup-text.color;
+            border-width: 1px;
+            }
+
+
+        error-popup-layout := Dialog {
+            height:100%; width: 100%;
+
+
+            error-popup-text := Text {
+                text: root.error-text-value;
+                wrap: word-wrap;
+                color: red;
+                horizontal-alignment: center;
+                }
+            StandardButton {kind: ok;}
+            }
+        }
+
+
     GridLayout {
         padding: 15px;
         spacing: 10px;

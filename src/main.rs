@@ -18,8 +18,19 @@ fn main() -> Result<(), slint::PlatformError> {
         move |string| {
             let ui = ui_handle.unwrap();
             let s = string.trim();
-            let inputtemp = convert_input_string(&s);
-            let output = convert_cel_to_fh(&inputtemp);
+            let f = match s.parse::<f64>() {
+                Ok(f) => f,
+                Err(err) => {
+                    dbg!(err);
+                    ui.set_error_text_value(
+                        "ParseFloatError:\n Please ensure you are entering a valid number".into(),
+                    );
+                    ui.invoke_show_error_popup();
+                    return;
+                }
+            };
+
+            let output = convert_cel_to_fh(&f);
             let result = output.to_string();
             ui.set_result(result.into());
         }
@@ -28,10 +39,10 @@ fn main() -> Result<(), slint::PlatformError> {
     ui.run()
 }
 
-fn convert_input_string(s: &str) -> f64 {
-    let f = s.trim().parse::<f64>().unwrap();
-    return f;
-}
+// fn convert_input_string(s: &str) -> f64 {
+//     let f = s.trim().parse::<f64>().unwrap();
+//     return f;
+// }
 
 fn convert_cel_to_fh(input: &f64) -> f64 {
     let fh = input * 1.8;
