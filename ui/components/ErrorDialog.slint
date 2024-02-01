@@ -1,0 +1,69 @@
+import {StandardButton } from "std-widgets.slint"; 
+
+
+export component ErrorDialog {
+ callback show-error-dialog; 
+ callback error-closed;     
+in-out property<string> error-type-string: "Error"; 
+in-out property<string> error-text-value: "";       
+in-out property<brush> background: white;
+
+
+show-error-dialog => {
+    error-popup.show();
+    }
+
+error-popup := PopupWindow {                      
+    width: 500px;                                 
+    close-on-click: false;                        
+                                                  
+    Rectangle {                                   
+        background: root.background;              
+        border-color: grey;                       
+        border-width: 3px;                        
+        GridLayout {                              
+            spacing: 5px;                         
+            padding: 5px;                         
+            Row {                                 
+                Rectangle {                       
+                    padding: 0px;                 
+                    height: 45px;                 
+                    background: lightgrey;        
+                    border-width: 3px;            
+                    border-color: black;          
+                                                  
+                Text {                            
+                    text: root.error-type-string; 
+                    font-size: 22px;              
+                    width: 480px;                 
+                    color: black;                 
+                    horizontal-alignment: center; 
+                    }                             
+                }                                 
+                }                                 
+            Row {                                 
+               error-text-output := Text  {       
+                    text: root.error-text-value;  
+                    color: red;                   
+                    font-size: 16px;              
+                    horizontal-alignment: center; 
+                    width: 480px;                 
+                    }                             
+                }                                 
+            Row {                                 
+                                                  
+                }                                 
+            Row {                                 
+            StandardButton {                      
+                colspan: 1;                       
+                kind: ok;                         
+                clicked => {                      
+                        error-popup.close()       
+                        }                         
+                }                                 
+                }                                 
+        }                                         
+    }                                             
+                                                  
+    }                                             
+  }

@@ -23,7 +23,6 @@ fn main() -> Result<(), slint::PlatformError> {
                 Err(err) => {
                     dbg!(err);
                     ui.set_error_text_value("Please enter a valid temperature ex: 37.85".into());
-                    ui.invoke_show_error_popup();
                     return;
                 }
             };
