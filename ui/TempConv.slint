@@ -4,13 +4,27 @@ export component TempConvWindow inherits Window {
     in property<string> result: "";
     in-out property<string> error-type-string: "Error";
     in-out property<string> error-text-value: "";
+    in-out property<[string]> input-unit-list: ["C","F","K"];
+    in-out property<[string]> output-unitlist: ["F","K"];
+    out property<[string]> fk-unit-list: ["F","K"];
+    out property<[string]> ck-unit-list: ["C","K"];
+    out property<[string]> fc-unit-list: ["F","C"];
+    in-out property<string> output-current-value: "F";
+    in-out property<string> input-unit-current-value: "C";
     callback request-convert-temp(string);
     callback error-closed();
     callback show-error-popup();
+    callback change-model();
+    callback selected-input-unit(string);
+    callback selected-output-unit(string);
 
 
     show-error-popup => {
         error-display.show-error-dialog();
+        }
+
+
+    selected-input-unit => {
         }
 
 
@@ -21,61 +35,6 @@ export component TempConvWindow inherits Window {
         error-type-string: parent.error-type-string;
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     GridLayout {
         padding: 15px;
@@ -105,8 +64,11 @@ export component TempConvWindow inherits Window {
             unitin :=  ComboBox {
                 width: self.preferred-width;
                 height: self.preferred-height;
-                model: ["C", "F", "K"];
-                current-value: "C";
+                model: root.input-unit-list;
+                current-value: root.input-unit-current-value;
+                selected => {
+                    root.selected-input-unit(self.current-value);
+                    }
                 }
 
             }
@@ -120,8 +82,11 @@ export component TempConvWindow inherits Window {
             unitout :=  ComboBox {
                 width: self.preferred-width;
                 height: self.preferred-height;
-                model: ["C", "F", "K"];
-                current-value: "F";
+                model: output-unitlist;
+                current-value: root.output-current-value;
+                selected => {
+                    root.selected-output-unit(self.current-value);
+                    }
                 }
             }
         Row {
