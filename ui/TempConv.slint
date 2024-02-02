@@ -2,29 +2,21 @@ import { Button, VerticalBox, LineEdit, ComboBox, StandardButton } from "std-wid
 import {ErrorDialog} from "./components/ErrorDialog.slint";
 export component TempConvWindow inherits Window {
     in property<string> result: "";
+    in property<string> result2: "";
     in-out property<string> error-type-string: "Error";
     in-out property<string> error-text-value: "";
     in-out property<[string]> input-unit-list: ["C","F","K"];
     in-out property<[string]> output-unitlist: ["F","K"];
     out property<[string]> fk-unit-list: ["F","K"];
     out property<[string]> ck-unit-list: ["C","K"];
-    out property<[string]> fc-unit-list: ["F","C"];
-    in-out property<string> output-current-value: "F";
+    out property<[string]> fc-unit-list: ["C","F"];
     in-out property<string> input-unit-current-value: "C";
-    callback request-convert-temp(string);
+    callback request-convert-temp(string,string);
     callback error-closed();
     callback show-error-popup();
-    callback change-model();
-    callback selected-input-unit(string);
-    callback selected-output-unit(string);
-
 
     show-error-popup => {
         error-display.show-error-dialog();
-        }
-
-
-    selected-input-unit => {
         }
 
 
@@ -56,7 +48,7 @@ export component TempConvWindow inherits Window {
             }
         Row {
             Text{
-                text: "From";
+                text: "Input unit";
                 horizontal-alignment: center;
                 }
             }
@@ -65,40 +57,30 @@ export component TempConvWindow inherits Window {
                 width: self.preferred-width;
                 height: self.preferred-height;
                 model: root.input-unit-list;
-                current-value: root.input-unit-current-value;
-                selected => {
-                    root.selected-input-unit(self.current-value);
-                    }
                 }
 
             }
         Row {
-            Text {
-                text: "To";
+            result := Text {
+                text: root.result;
+                color: green;
+                font-size: 16px;
                 horizontal-alignment: center;
                 }
             }
         Row {
-            unitout :=  ComboBox {
-                width: self.preferred-width;
-                height: self.preferred-height;
-                model: output-unitlist;
-                current-value: root.output-current-value;
-                selected => {
-                    root.selected-output-unit(self.current-value);
-                    }
-                }
-            }
-        Row {
-            Text {
-                text: root.result;
+            result2 :=   Text {
+                text: root.result2;
+                color: blue;
+                font-size: 16px;
+                horizontal-alignment: center;
                 }
             }
         Row {
             Button {
                 text: "Convert";
                 clicked => {
-                    root.request-convert-temp(temp-input.text);
+                    root.request-convert-temp(temp-input.text,unitin.current-value);
                 }
                 }
             }

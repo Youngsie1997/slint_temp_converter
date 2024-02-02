@@ -1,3 +1,5 @@
+use slint::format;
+
 slint::include_modules!();
 
 fn main() -> Result<(), slint::PlatformError> {
@@ -15,9 +17,9 @@ fn main() -> Result<(), slint::PlatformError> {
 
     ui.on_request_convert_temp({
         let ui_handle = ui.as_weak();
-        move |string| {
+        move |value, unit| {
             let ui = ui_handle.unwrap();
-            let s = string.trim();
+            let s = value.trim();
             let f = match s.parse::<f64>() {
                 Ok(f) => f,
                 Err(err) => {
@@ -27,59 +29,34 @@ fn main() -> Result<(), slint::PlatformError> {
                     return;
                 }
             };
-
-            //        let output = convert_cel_to_fh(f);
-            let output = convert_fh_to_cel(f);
-            let result = output.to_string();
-            ui.set_result(result.into());
-        }
-    });
-
-    ui.on_selected_input_unit({
-        let ui_handle = ui.as_weak();
-        move |unit| {
-            let ui = ui_handle.unwrap();
-            let unit = unit.trim();
-            match unit {
+            match unit.trim() {
                 "C" => {
-                    ui.set_output_unitlist(ui.get_fk_unit_list());
-                    ui.set_output_current_value("F".into());
+                    let fh = convert_cel_to_fh(&f);
+                    let kelvin = convert_cel_to_kelvin(&f);
+                    let result = format!("{:.2} F", fh);
+                    let result2 = format!("{:.2} K", kelvin);
+                    ui.set_result(result);
+                    ui.set_result2(result2);
                 }
                 "F" => {
-                    ui.set_output_unitlist(ui.get_ck_unit_list());
-                    ui.set_output_current_value("C".into());
+                    let cel = convert_fh_to_cel(&f);
+                    let kelvin = convert_fh_to_kelvin(&f);
+                    let result = format!("{:.2} C", cel);
+                    let result2 = format!("{:.2} K", kelvin);
+                    ui.set_result(result);
+                    ui.set_result2(result2);
                 }
                 "K" => {
-                    ui.set_output_unitlist(ui.get_fc_unit_list());
-                    ui.set_output_current_value("F".into());
+                    let cel = convert_kelvin_to_cel(&f);
+                    let fh = convert_kelvin_to_fh(&f);
+                    let result = format!("{:.2} C", cel);
+                    let result2 = format!("{:.2} F", fh);
+                    ui.set_result(result);
+                    ui.set_result2(result2);
                 }
-                _ => return,
-            }
-        }
-    });
-
-    ui.on_selected_output_unit({
-        let ui_handle = ui.as_weak();
-        move |unit| {
-            let ui = ui_handle.unwrap();
-            let unit = unit.trim();
-            match unit {
-                "C" => {
-                    if ui.get_input_unit_current_value() == unit {
-                        ui.set_input_unit_current_value("F".into());
-                    }
+                _ => {
+                    return;
                 }
-                "F" => {
-                    if ui.get_input_unit_current_value() == unit {
-                        ui.set_input_unit_current_value("C".into());
-                    }
-                }
-                "K" => {
-                    if ui.get_input_unit_current_value() == unit {
-                        ui.set_input_unit_current_value("F".into());
-                    }
-                }
-                _ => return,
             }
         }
     });
@@ -92,27 +69,27 @@ fn main() -> Result<(), slint::PlatformError> {
 //     return f;
 // }
 
-fn convert_cel_to_fh(input: f64) -> f64 {
+fn convert_cel_to_fh(input: &f64) -> f64 {
     return input * 1.8 + 32.00;
 }
 
-fn convert_cel_to_kelvin(input: f64) -> f64 {
+fn convert_cel_to_kelvin(input: &f64) -> f64 {
     return input + 273.15;
 }
 
-fn convert_fh_to_cel(input: f64) -> f64 {
+fn convert_fh_to_cel(input: &f64) -> f64 {
     return (input - 32.00) / 1.8;
 }
 
-fn convert_fh_to_kelvin(input: f64) -> f64 {
+fn convert_fh_to_kelvin(input: &f64) -> f64 {
     return convert_fh_to_cel(input) + 273.15;
 }
 
-fn convert_kelvin_to_cel(input: f64) -> f64 {
+fn convert_kelvin_to_cel(input: &f64) -> f64 {
     return input - 273.15;
 }
 
-fn convert_kelvin_to_fh(mut input: f64) -> f64 {
-    input = convert_kelvin_to_cel(input);
-    return convert_cel_to_fh(input);
+fn convert_kelvin_to_fh(input: &f64) -> f64 {
+    let cel = convert_kelvin_to_cel(input);
+    return convert_cel_to_fh(&cel);
 }
