@@ -3595,7 +3595,7 @@ dependencies = [
 
 [[package]]
 name = "tempconverter"
-version = "0.3.0"
+version = "1.2.1"
 dependencies = [
  "slint",
  "slint-build",

@@ -1,6 +1,6 @@
 [package]
 name = "tempconverter"
-version = "0.3.0"
+version = "1.2.1"
 authors = ["Connor Youngs <email@connoryoungs.com>"]
 edition = "2021"
 build = "build.rs"
@@ -16,6 +16,13 @@ slint-build = "1.3"
 
 [package.metadata.bundle]
 name = "Temperature Converter"
-identifier = "io.github.Youngsie1997.tempconv"
+identifier = "com.github.Youngsie1997.slint_temp_converter"
 description = "A desktop app for converting temperature"
-icon = ["./icon.png", "/icon@2x.png"]
+icon = ["./icon.png"]
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
