@@ -26,7 +26,7 @@ export component TempConvWindow inherits Window {
         }
 
     GridLayout {
-        padding: 15px;
+        padding: 25px;
         spacing: 10px;
         Row {
           temp-text :=  Text {
@@ -37,7 +37,7 @@ export component TempConvWindow inherits Window {
         Row {
           temp-input :=  LineEdit {
                 font-size: 16px;
-                width: unitin.preferred-width;
+                width: 120px;
                 height: 35px;
                 placeholder-text: "input here";
                 horizontal-alignment: center;
@@ -54,6 +54,7 @@ export component TempConvWindow inherits Window {
             }
         Row {
             unitin :=  ComboBox {
+                preferred-width : 120px;
                 width: self.preferred-width;
                 height: self.preferred-height;
                 model: root.input-unit-list;
