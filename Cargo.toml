@@ -1,6 +1,6 @@
 [package]
 name = "tempconverter"
-version = "1.2.1"
+version = "2.0.0"
 authors = ["Connor Youngs <email@connoryoungs.com>"]
 edition = "2021"
 build = "build.rs"
